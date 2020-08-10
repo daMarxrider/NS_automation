@@ -1,3 +1,6 @@
 [submodule "joycontrol"]
 	path = joycontrol
 	url = https://github.com/mart1nro/joycontrol.git
+[submodule "joycontrol-pluginloader"]
+	path = joycontrol-pluginloader
+	url = https://github.com/Almtr/joycontrol-pluginloader.git
