@@ -30,10 +30,10 @@ def getTextFromCaptureDevice(inst=None, capture_device=None):
     grey_text = pytesseract.image_to_string(cimg)
     print("grey_text")
     print(grey_text)
-    cimg = cimg.crop((left, top, right, bottom))
-    grey_text = pytesseract.image_to_string(cimg)
-    print("cropped_grey_text")
-    print(grey_text)
+    # cimg = cimg.crop((left, top, right, bottom))
+    # grey_text = pytesseract.image_to_string(cimg)
+    # print("cropped_grey_text")
+    # print(grey_text)
     return text.strip()
 
 
