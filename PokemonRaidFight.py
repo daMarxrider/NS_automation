@@ -219,7 +219,6 @@ class PokemonRaidFight(JoycontrolPlugin):
                     break
                 else:
                     await self.wait(1)
-            # result screen
             rounds += 1
             print(f'rounds: {rounds}')
             await self.wait(10)
