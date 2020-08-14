@@ -213,7 +213,7 @@ class PokemonRaidFight(JoycontrolPlugin):
                     await self.button_push('a')
                     await self.wait(1)
                 elif getRaidResult().__contains__("You defeated"):
-                    await self.wait(5)
+                    await self.wait(1)
                     await self.button_push('a')
                     await self.wait(1)
                     break
@@ -221,4 +221,4 @@ class PokemonRaidFight(JoycontrolPlugin):
                     await self.wait(1)
             rounds += 1
             print(f'rounds: {rounds}')
-            await self.wait(10)
+            await self.wait(8)

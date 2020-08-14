@@ -11,6 +11,7 @@ def getTextFromCaptureDevice(capture_device=None):
     if capture_device is None:
         capture_device = cv2.VideoCapture(2)
     ret, frame = capture_device.read()
+    cv2.imshow("video", frame)
     if not ret:
         print("error")
         return
