@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 def getTextFromCaptureDevice(inst=None, capture_device=None):
     if capture_device is None:
-        capture_device = cv2.VideoCapture(2)
+        capture_device = cv2.VideoCapture(0)
     ret, frame = capture_device.read()
     if not ret:
         print("error")
@@ -39,7 +39,7 @@ def getTextFromCaptureDevice(inst=None, capture_device=None):
 
 def getTextFromRaidStart(capture_device=None):
     if capture_device is None:
-        capture_device = cv2.VideoCapture(2)
+        capture_device = cv2.VideoCapture(0)
     ret, frame = capture_device.read()
     if not ret:
         print("error")
@@ -62,7 +62,7 @@ def getTextFromRaidStart(capture_device=None):
 
 def getTextFromTextBubbleOverworld(capture_device=None):
     if capture_device is None:
-        capture_device = cv2.VideoCapture(2)
+        capture_device = cv2.VideoCapture(0)
     ret, frame = capture_device.read()
     if not ret:
         print("error")
@@ -79,7 +79,7 @@ def getTextFromTextBubbleOverworld(capture_device=None):
 
 def getTextFromInRaidMenu(capture_device=None):
     if capture_device is None:
-        capture_device = cv2.VideoCapture(2)
+        capture_device = cv2.VideoCapture(0)
     ret, frame = capture_device.read()
     if not ret:
         print("error")
@@ -102,7 +102,7 @@ def getTextFromInRaidMenu(capture_device=None):
 
 def getTextFromCatchPrompt(capture_device=None):
     if capture_device is None:
-        capture_device = cv2.VideoCapture(2)
+        capture_device = cv2.VideoCapture(0)
     ret, frame = capture_device.read()
     if not ret:
         print("error")
@@ -125,7 +125,7 @@ def getTextFromCatchPrompt(capture_device=None):
 
 def getRaidResult(capture_device=None):
     if capture_device is None:
-        capture_device = cv2.VideoCapture(2)
+        capture_device = cv2.VideoCapture(0)
     ret, frame = capture_device.read()
     if not ret:
         print("error")
@@ -156,49 +156,36 @@ class PokemonRaidFight(JoycontrolPlugin):
             print("starting before den")
             await self.button_push('a')
             await self.wait(2)
-            while not getTextFromTextBubbleOverworld().__contains__("Want to throw in"):
-                await self.wait(1)
-                print("expecting want to throw in")
-            await self.button_push('a')
-            while not getTextFromTextBubbleOverworld().__contains__("like to save"):
-                await self.wait(1)
-                print("expected like to save")
-            await self.button_push('a')
-            while not getTextFromTextBubbleOverworld().__contains__("saved"):
-                await self.wait(2)
-                print("expected saved")
-            await self.button_push('a')
-            while not getTextFromTextBubbleOverworld().__contains__("into the den"):
-                await self.wait(1)
-                print("expected into the den")
-            await self.button_push('a')
-            await self.wait(1)
-            await self.button_push('a')
-            while not getTextFromRaidStart().__contains__('Don\'t Invite Others'):
-                await self.wait(1)
-                print("expected dont invite others")
-            await self.button_push('down')
-            await self.wait(0.3)
-            await self.button_push('a')
-            await self.wait(1)
-            await self.button_push('a')
-            await self.wait(0.3)
-            while not getTextFromInRaidMenu().__contains__('Fight'):
-                await self.wait(1)
-            # fight started
-            print("fight started")
-            await self.button_push('a')
-            await self.wait(1)
-            await self.button_push('left')
-            await self.wait(1)
-            await self.button_push('a')
-            await self.wait(1)
-            await self.button_push('a')
-            await self.wait(1)
-            await self.button_push('a')
-            await self.wait(1)
             while True:
-                if getTextFromInRaidMenu().__contains__('Fight'):
+                text_bubble = getTextFromTextBubbleOverworld()
+                if text_bubble.__contains__("Want to throw in"):
+                    await self.wait(1)
+                    print("expecting want to throw in")
+                    await self.button_push('a')
+                elif text_bubble.__contains__("like to save"):
+                    await self.wait(1)
+                    print("expected like to save")
+                    await self.button_push('a')
+                elif text_bubble.__contains__("saved"):
+                    await self.wait(2)
+                    print("expected saved")
+                    await self.button_push('a')
+                elif text_bubble.__contains__("into the den"):
+                    await self.wait(1)
+                    print("expected into the den")
+                    await self.button_push('a')
+                    await self.wait(1)
+                    await self.button_push('a')
+                elif getTextFromRaidStart().__contains__('Don\'t Invite Others'):
+                    await self.wait(1)
+                    print("expected dont invite others")
+                    await self.button_push('down')
+                    await self.wait(0.3)
+                    await self.button_push('a')
+                    await self.wait(1)
+                    await self.button_push('a')
+                    await self.wait(0.3)
+                elif getTextFromInRaidMenu().__contains__('Fight'):
                     await self.button_push("a")
                     await self.wait(1)
                     await self.button_push("a")
@@ -218,7 +205,7 @@ class PokemonRaidFight(JoycontrolPlugin):
                     await self.wait(1)
                     break
                 else:
-                    await self.wait(1)
+                    await self.wait(0.2)
             rounds += 1
             print(f'rounds: {rounds}')
-            await self.wait(8)
+            await self.wait(15)
