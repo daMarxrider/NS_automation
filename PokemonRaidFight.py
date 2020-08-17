@@ -4,6 +4,8 @@ from JoycontrolPlugin import JoycontrolPlugin
 from PIL import ImageEnhance, ImageOps, Image
 import pytesseract
 
+import inspect
+
 logger = logging.getLogger(__name__)
 
 
@@ -79,6 +81,7 @@ def getTextFromRaidStart(capture_device=None):
     bottom = height
     img = img.crop((left, top, right, bottom))
     text = pytesseract.image_to_string(img)
+    print(inspect.currentframe().f_code.co_name)
     print(text)
     return text.strip()
 
@@ -96,6 +99,7 @@ def getTextFromTextBubbleOverworld(capture_device=None):
     img = ImageOps.grayscale(img)
     img = ImageOps.invert(img)
     text = pytesseract.image_to_string(img)
+    print(inspect.currentframe().f_code.co_name)
     print(text)
     return text.strip()
 
@@ -119,6 +123,7 @@ def getTextFromInRaidMenu(capture_device=None):
     bottom = height/8*6
     img = img.crop((left, top, right, bottom))
     text = pytesseract.image_to_string(img)
+    print(inspect.currentframe().f_code.co_name)
     print(text)
     return text.strip()
 
@@ -142,6 +147,7 @@ def getTextFromCatchPrompt(capture_device=None):
     bottom = height
     img = img.crop((left, top, right, bottom))
     text = pytesseract.image_to_string(img)
+    print(inspect.currentframe().f_code.co_name)
     print(text)
     return text.strip()
 
@@ -165,6 +171,7 @@ def getRaidResult(capture_device=None):
     bottom = height/2
     img = img.crop((left, top, right, bottom))
     text = pytesseract.image_to_string(img)
+    print(inspect.currentframe().f_code.co_name)
     print(text)
     return text.strip()
 
@@ -209,7 +216,7 @@ class PokemonRaidFight(JoycontrolPlugin):
                     await self.wait(1)
                     await self.button_push('a')
                     await self.wait(0.3)
-                elif getTextFromInRaidMenu().__contains__('Fight'):
+                elif getTextFromInRaidMenu().__contains__('Fight') or getTextFromInRaidMenu().__contains__('Cheer On'):
                     await self.button_push("a")
                     await self.wait(1)
                     await self.button_push("a")
