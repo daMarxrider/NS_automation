@@ -191,49 +191,40 @@ class PokemonRaidFight(JoycontrolPlugin):
                     await self.wait(2)
                 elif text_bubble.__contains__("Want to throw in"):
                     await self.wait(1)
-                    print("expecting want to throw in")
                     await self.button_push('a')
                 elif text_bubble.__contains__("like to save"):
                     await self.wait(1)
-                    print("expected like to save")
                     await self.button_push('a')
                 elif text_bubble.__contains__("saved"):
                     await self.wait(2)
-                    print("expected saved")
                     await self.button_push('a')
                 elif text_bubble.__contains__("into the den"):
                     await self.wait(1)
-                    print("expected into the den")
                     await self.button_push('a')
                     await self.wait(1)
                     await self.button_push('a')
                 elif getTextFromRaidStart().__contains__('Don\'t Invite Others'):
                     await self.wait(1)
-                    print("expected dont invite others")
                     await self.button_push('down')
                     await self.wait(0.3)
                     await self.button_push('a')
                     await self.wait(1)
                     await self.button_push('a')
-                    await self.wait(0.3)
                 elif getTextFromInRaidMenu().__contains__('Fight') or getTextFromInRaidMenu().__contains__('Cheer On'):
                     await self.button_push("a")
                     await self.wait(1)
                     await self.button_push("a")
                     await self.wait(1)
                     await self.button_push("a")
-                    await self.wait(1)
                 elif getTextFromCatchPrompt().__contains__("Catch"):
                     print("dont catch")
                     await self.wait(1)
                     await self.button_push('down')
                     await self.wait(1)
                     await self.button_push('a')
-                    await self.wait(1)
                 elif getRaidResult().__contains__("You defeated"):
                     await self.wait(1)
                     await self.button_push('a')
-                    await self.wait(1)
                     break
                 else:
                     await self.wait(0.2)
