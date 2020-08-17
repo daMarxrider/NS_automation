@@ -239,4 +239,3 @@ class PokemonRaidFight(JoycontrolPlugin):
                     await self.wait(0.2)
             rounds += 1
             print(f'rounds: {rounds}')
-            # await self.wait(15)
