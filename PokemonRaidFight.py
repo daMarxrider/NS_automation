@@ -37,6 +37,29 @@ def getTextFromCaptureDevice(inst=None, capture_device=None):
     return text.strip()
 
 
+def getOverworldYButton(inst=None, capture_device=None):
+    if capture_device is None:
+        capture_device = cv2.VideoCapture(0)
+    ret, frame = capture_device.read()
+    if not ret:
+        print("error")
+        return
+    img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+    # img = Image.fromarray(frame)
+    img = ImageEnhance.Sharpness(img).enhance(1)
+    img = ImageOps.grayscale(img)
+    img = ImageOps.invert(img)
+    width, height = img.size
+    left = width/100*4
+    top = height / 100*90
+    right = width/100*6
+    bottom = height/100*94
+    img = img.crop((left, top, right, bottom))
+    text = pytesseract.image_to_string(img, config='--psm 10')
+    print(text)
+    return text.strip()
+
+
 def getTextFromRaidStart(capture_device=None):
     if capture_device is None:
         capture_device = cv2.VideoCapture(0)
@@ -153,12 +176,13 @@ class PokemonRaidFight(JoycontrolPlugin):
         await self.wait(2)
         rounds = 0
         while True:
-            print("starting before den")
-            await self.button_push('a')
-            await self.wait(2)
             while True:
                 text_bubble = getTextFromTextBubbleOverworld()
-                if text_bubble.__contains__("Want to throw in"):
+                if getOverworldYButton() == 'Y':
+                    print("starting before den")
+                    await self.button_push('a')
+                    await self.wait(2)
+                elif text_bubble.__contains__("Want to throw in"):
                     await self.wait(1)
                     print("expecting want to throw in")
                     await self.button_push('a')
@@ -208,4 +232,4 @@ class PokemonRaidFight(JoycontrolPlugin):
                     await self.wait(0.2)
             rounds += 1
             print(f'rounds: {rounds}')
-            await self.wait(15)
+            # await self.wait(15)
