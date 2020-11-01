@@ -9,9 +9,8 @@ import inspect
 logger = logging.getLogger(__name__)
 
 
-def getTextFromCaptureDevice(inst=None, capture_device=None):
-    if capture_device is None:
-        capture_device = cv2.VideoCapture(0)
+def getTextFromCaptureDevice(inst=None):
+    capture_device = cv2.VideoCapture(3)
     ret, frame = capture_device.read()
     if not ret:
         print("error")
@@ -71,9 +70,8 @@ def getTextFromCaptureDevice(inst=None, capture_device=None):
     return result_text
 
 
-def getOverworldYButton(inst=None, capture_device=None):
-    if capture_device is None:
-        capture_device = cv2.VideoCapture(0)
+def getOverworldYButton(inst=None):
+    capture_device = cv2.VideoCapture(3)
     ret, frame = capture_device.read()
     if not ret:
         print("error")

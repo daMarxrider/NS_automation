@@ -2,6 +2,7 @@
 
 # Setup
 for istallation instructions and requirements look at the 2 linked submodules.
+and you need a capture card(a cheap one for ~20€ is good enough)
 
 # Pokemon SwordShield Automation
 currently only PokemonRaidFight.py working  
