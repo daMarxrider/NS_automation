@@ -6,8 +6,8 @@ import mss
 import imutils
 import os
 
-lower_blue = np.array([0, 70, 0], dtype=np.uint8)
-upper_blue = np.array([66, 150, 120], dtype=np.uint8)
+lower_blue = np.array([20, 40, 0], dtype=np.uint8)
+upper_blue = np.array([50, 100, 120], dtype=np.uint8)
 
 # lower_blue = np.array([0, 17, 0], dtype=np.uint8)
 # upper_blue = np.array([44, 100, 160], dtype=np.uint8)
@@ -56,7 +56,9 @@ class VideoStreamWidget(object):
                 monitor = {"top": 50, "left": 150, "width": 360, "height": 410}
                 while "Screen capturing":
                     last_time = time.time()
-                    self.img = np.array(sct.grab(monitor))
+                    self.img = cv2.circle(
+                        np.array(sct.grab(monitor)), (180, 180), 180, (0, 0, 0), 2)
+
                     # self.img = cv2.cvtColor(self.img, cv2.COLOR_HSV2BGR)
 
 
@@ -86,14 +88,24 @@ class VideoStreamWidget(object):
         # Return the resized image
         return cv2.resize(image, dim, interpolation=inter)
 
+    def auto_canny(self, image, sigma=0.33):
+        v = np.median(image)
+        # apply automatic Canny edge detection using the computed median
+        lower = int(max(0, (1.0 - sigma) * v))
+        upper = int(min(255, (1.0 + sigma) * v))
+        edged = cv2.Canny(image, lower, upper)
+        # return the edged image
+        return edged
+
     def detect_shit(self):
         large_image = self.base_map_mask
         w, h = self.mask.shape[:]
         # idfk, maybe change method of matching
 
         # Dynamically rescale image for better template matching
-        # for x in range(1):
-        for scale in np.linspace(0.8, 0.9, 20)[::-1]:
+        for x in range(1):
+            scale = 0.85
+        # for scale in np.linspace(0.825, 0.85, 10)[::-1]:
 
             print(scale)
             # Resize image to scale and keep track of ratio
@@ -134,6 +146,18 @@ class VideoStreamWidget(object):
             # time.sleep(0.001)
             pass
         try:
+            image = self.img
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            blurred = cv2.GaussianBlur(gray, (3, 3), 0)
+            # apply Canny edge detection using a wide threshold, tight
+            # threshold, and automatically determined threshold
+            wide = cv2.Canny(blurred, 10, 200)
+            tight = cv2.Canny(blurred, 225, 250)
+            auto = self.auto_canny(blurred)
+# show the images
+            cv2.imshow("Original", image)
+            cv2.imshow("Edges", np.hstack([wide, tight, auto]))
+
             hsv = cv2.cvtColor(self.img, cv2.COLOR_BGR2HSV)
 
             hsv = cv2.cvtColor(self.img, cv2.COLOR_BGR2HSV)
@@ -147,7 +171,7 @@ class VideoStreamWidget(object):
             cv2.imshow('res', res)
             cv2.namedWindow('map_mask', cv2.WINDOW_NORMAL)
             cv2.imshow('map_mask', self.base_map_mask)
-            self.detect_shit()
+            # self.detect_shit()
 
             # cnts = cv2.findContours(shapeMask.copy(), cv2.RETR_EXTERNAL,
             #                         cv2.CHAIN_APPROX_SIMPLE)
